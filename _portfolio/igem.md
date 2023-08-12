@@ -1,6 +1,6 @@
 ---
 title: "2022 international Genetically Engineered Machine Competition"
-excerpt: "I participated as the leader of modelling group in BNU-China 2022, where we won silver medal.<br/>
+excerpt: "I participated as the leader of modelling group in BNU-China 2022, and we won silver medal finally.<br/>
 <img src='/images/igem.png' width='500' height='300'>"
 collection: portfolio
 ---
@@ -14,7 +14,7 @@ In this project, we developed a new type of intestinal colonization engineered b
 <!-- ![Pathway for Δ9-THC detecting](images/../../images/igem-pathway1.png)
 ![Pathway for Δ9-THC degrading](images/../../images/igem-pathway2.png) -->
 <center class='half'>
-    <img src='images/../../images/igem-pathway1.png' width='250' alt='Pathway for Δ9-THC detecting'><img src='images/../../images/igem-pathway2.png' width='300' alt='Pathway for Δ9-THC degrading'>
+    <img src='/images/igem-pathway1.png' width='250' alt='Pathway for Δ9-THC detecting'><img src='/images/igem-pathway2.png' width='300' alt='Pathway for Δ9-THC degrading'>
 </center>
 
 For further details about our biological pathway design and how we model it, please refer to our [project homepage](https://2022.igem.wiki/bnu-china/) and [model part](https://2022.igem.wiki/bnu-china/model).
