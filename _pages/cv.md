@@ -11,30 +11,39 @@ redirect_from:
 
 Education
 ======
-* B.S. in GitHub, GitHub University, 2012
-* M.S. in Jekyll, GitHub University, 2014
-* Ph.D in Version Control Theory, GitHub University, 2018 (expected)
+* B.S. in Computer Science and Technology, School of Artificial Intelligence, Beijing Normal University, 2024 (expected)
 
 Work experience
 ======
-* Summer 2015: Research Assistant
-  * Github University
-  * Duties included: Tagging issues
-  * Supervisor: Professor Git
+* Apr. 2023: Research Assistant
+  * [Natural Hazards Remote Sensing Lab](https://gsprs-pku.github.io/), Peking University
+  * Duties included:
+    * Implement the domain adaptation segmentation model for *"Enhanced Semantic Segmentation of Multi-annual Retrogressive Thaw Slumps by Domain Adaption" (prepraring)*, having achieved an F1 score of 0.829 and a recall rate of 0.934, outperforming CycleGAN and fine-tuning
+    * Adapt Segment Anything Model (SAM) to correctly segment craters on planet surface
+  * Supervisor: [Prof. Xie Hu](https://sites.google.com/site/xiehusar/)
+    * Co-advised by [Prof. Shanghang Zhang](https://www.shanghangzhang.com/)
 
-* Fall 2015: Research Assistant
-  * Github University
+* Sept. 2022: Research Assistant
+  * Key Laboratory of Beam Technology of Ministry of Education, Beijing Normal University
+  * Duties included:
+    * Exploring the combination of computer science and medical imaging techniques, especially in fields of positron emission tomography (PET) and Compton imaging
+    * Implemented models for medical image classification and segmentation from U-net to recent Segment Anything Model (SAM), having gained insights into both the imaging principle and related downstream tasks
+    * Currently working on physics-based imaging correction using methods of deep learning and reinforcement learning-aided imaging
+  * Supervisor: [Prof. Jianyong Jiang](https://scholar.google.com/citations?user=qput_McAAAAJ&hl=en&oi=ao)
+  <!-- * Github University
   * Duties included: Merging pull requests
-  * Supervisor: Professor Hub
+  * Supervisor: Professor Hub -->
   
-Skills
+Skills and Interest
 ======
-* Skill 1
-* Skill 2
-  * Sub-skill 2.1
-  * Sub-skill 2.2
-  * Sub-skill 2.3
-* Skill 3
+* Professional: proficient in
+  * Programming languages: C/C++, Python, MATLAB, C#, Java
+  * Deep learning frameworks: PyTorch, TensorFlow
+  * Development environment configuration across multiple OS platforms, including Linux
+* Miscellaneous
+  * Swimming
+  * Basketball
+  * Climbing
 
 Publications
 ======
