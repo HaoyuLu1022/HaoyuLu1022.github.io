@@ -30,7 +30,13 @@ Work experience
     * Implemented models for medical image classification and segmentation from U-net to recent Segment Anything Model (SAM), having gained insights into both the imaging principle and related downstream tasks
     * Currently working on physics-based imaging correction using methods of deep learning and reinforcement learning-aided imaging
   * Supervisor: [Prof. Jianyong Jiang](https://scholar.google.com/citations?user=qput_McAAAAJ&hl=en&oi=ao)
-  
+
+Publications
+======
+  <ul>{% for post in site.publications %}
+    {% include archive-single-cv.html %}
+  {% endfor %}</ul>
+
 Skills and Interest
 ======
 * Professional: proficient in
@@ -41,12 +47,6 @@ Skills and Interest
   * Swimming
   * Basketball
   * Climbing
-
-Publications
-======
-  <ul>{% for post in site.publications %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
   
 <!-- Talks
 ======
