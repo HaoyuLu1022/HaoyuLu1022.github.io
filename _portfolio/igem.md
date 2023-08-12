@@ -5,6 +5,7 @@ excerpt: "I participated as the leader of modelling group in BNU-China 2022, whe
         noresize='noresize'
         style='position: absolute; background: transparent; width: 100%; height: 100%'
         src='https://2022.igem.wiki/bnu-china/'
-        frameborder='0'>"
+        frameborder='0'>
+</iframe>"
 collection: portfolio
 ---
