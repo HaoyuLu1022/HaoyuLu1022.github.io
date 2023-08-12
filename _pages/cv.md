@@ -30,9 +30,6 @@ Work experience
     * Implemented models for medical image classification and segmentation from U-net to recent Segment Anything Model (SAM), having gained insights into both the imaging principle and related downstream tasks
     * Currently working on physics-based imaging correction using methods of deep learning and reinforcement learning-aided imaging
   * Supervisor: [Prof. Jianyong Jiang](https://scholar.google.com/citations?user=qput_McAAAAJ&hl=en&oi=ao)
-  <!-- * Github University
-  * Duties included: Merging pull requests
-  * Supervisor: Professor Hub -->
   
 Skills and Interest
 ======
@@ -63,6 +60,6 @@ Publications
     {% include archive-single-cv.html %}
   {% endfor %}</ul> -->
   
-Service and leadership
+<!-- Service and leadership
 ======
-* Currently signed in to 43 different slack teams
+* Currently signed in to 43 different slack teams -->
