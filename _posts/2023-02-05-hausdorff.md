@@ -43,16 +43,19 @@ $$
 双向Hausdorff距离取两个单向Hausdorff距离的最大值，度量两个点集的不相似程度
 - 对噪声/异常值敏感
 ![](https://img-blog.csdnimg.cn/20200603191338464.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3lpemhpc2h1aXhpb25n,size_16,color_FFFFFF,t_70)
+
 # 平均Haussdorff距离 AHD
 令点集$X, Y$，$X$即预测，$Y$即ground truth（像素坐标）；其平均Hausdorff距离为
 $$
 H_{avg}(X, Y)=\frac{1}{|X|}\sum\limits_{x\in X}\min\limits_{y\in Y}d(x, y)+\frac{1}{|Y|}\sum\limits\limits_{y\in Y}\min\limits_{x\in X}d(x, y)
 $$
 其中$d(\cdot, \cdot)$可以是任意度量
+
 ## 问题
 - 带线性层的CNN隐式决定了预测点的个数$|X|$，即网络最后一层的size
 - U-Net等FCN可以通过higher activation表现对象的中心，但不能得到像素坐标
 - 为了便于后向传播学习，损失函数必须是可微的
+
 # 带权Haussdorff距离 WHD
 $$
 H_{w}(p, Y)=\frac{1}{S+\epsilon}\sum\limits_{x\in \Omega}p_{x}\min\limits_{y\in Y}d(x, y)+\frac{1}{|Y|} \sum_{y \in Y} M_{x \in \Omega}^{\alpha}\left[p_x d(x, y)+\left(1-p_x\right) d_{\max }\right]
@@ -85,5 +88,6 @@ S_o^{(1)} / S_r^{(1)} & 0 \\
 0 & S_o^{(2)} / S_r^{(2)}
 \end{array}\right)
 $$
+
 ## 相对于pixelwise loss的优势
 pixelwise loss不清楚两点$x\in X$和$y\in Y$有多近，除非$x=y$
