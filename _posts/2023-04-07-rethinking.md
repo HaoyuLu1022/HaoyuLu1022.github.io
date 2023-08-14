@@ -1,3 +1,36 @@
+---
+title: 'Reflections on Researches'
+date: 2023-04-07
+permalink: /posts/2023/04/rethinking/
+tags:
+  - reflection
+---
+
+A general overview of papers read recently, and a reflection on what we have done and what to do next.
+
+- [端到端的医学影像重建 (Compton/PET)](#端到端的医学影像重建-comptonpet)
+	- [GAN](#gan)
+	- [Flow](#flow)
+	- [UNet](#unet)
+	- [问题](#问题)
+- [Object Localization](#object-localization)
+	- [WSOL: 弱监督目标定位](#wsol-弱监督目标定位)
+		- [什么是WSOL](#什么是wsol)
+		- [图像级标注 image-level annotation](#图像级标注-image-level-annotation)
+		- [通常思路: CAM](#通常思路-cam)
+		- [CI-CAM](#ci-cam)
+- [Causal Inference: 因果推断](#causal-inference-因果推断)
+- [GCN 图卷积神经网络](#gcn-图卷积神经网络)
+	- [相关应用](#相关应用)
+		- [Conformation Generation](#conformation-generation)
+		- [GraphNet](#graphnet)
+		- [Point-GNN](#point-gnn)
+		- [Track Reconstruction](#track-reconstruction)
+		- [Interaction Network](#interaction-network)
+	- [数据集组织](#数据集组织)
+	- [To Start with: GraphSAGE](#to-start-with-graphsage)
+
+
 # 端到端的医学影像重建 (Compton/PET)
 ## GAN
 - Shen, G., Dwivedi, K., Majima, K., Horikawa, T., & Kamitani, Y. (2019). End-to-end deep image reconstruction from human brain activity. _Frontiers in computational neuroscience_, _13_, 21
@@ -37,38 +70,6 @@ CAM，即Class Activation Map。通常模型首先生成CAM，然后分割出激
 	- 所以理论上图同构没有意义
 - 单向图：只有scatter指向absorber的边
 - 重边：相同的一组scatter和absorber可能重复形成event
----
-title: 'Reflections on Researches'
-date: 2023-04-07
-permalink: /posts/2023/04/rethinking/
-tags:
-  - reflection
----
-
-A general overview of papers read recently, and a reflection on what we have done and what to do next.
-
-- [端到端的医学影像重建 (Compton/PET)](#端到端的医学影像重建-comptonpet)
-	- [GAN](#gan)
-	- [Flow](#flow)
-	- [UNet](#unet)
-	- [问题](#问题)
-- [Object Localization](#object-localization)
-	- [WSOL: 弱监督目标定位](#wsol-弱监督目标定位)
-		- [什么是WSOL](#什么是wsol)
-		- [图像级标注 image-level annotation](#图像级标注-image-level-annotation)
-		- [通常思路: CAM](#通常思路-cam)
-		- [CI-CAM](#ci-cam)
-- [Causal Inference: 因果推断](#causal-inference-因果推断)
-- [GCN 图卷积神经网络](#gcn-图卷积神经网络)
-	- [相关应用](#相关应用)
-		- [Conformation Generation](#conformation-generation)
-		- [GraphNet](#graphnet)
-		- [Point-GNN](#point-gnn)
-		- [Track Reconstruction](#track-reconstruction)
-		- [Interaction Network](#interaction-network)
-	- [数据集组织](#数据集组织)
-	- [To Start with: GraphSAGE](#to-start-with-graphsage)
-
 
 ## 相关应用
 ### Conformation Generation
