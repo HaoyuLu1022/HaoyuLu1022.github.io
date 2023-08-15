@@ -52,8 +52,8 @@ x\cos{\theta}+y\cos{\theta}=p
 $$
 
 方向由$\theta$唯一定义，该方向上的每一点放射源由$p$唯一定义。则根据$(\theta, p)$可以定义Radon变换
-$$
 
+$$
 \begin{aligned}
 \mathcal{R}_{L}&=\int_{L}f(x, y)ds\\
 \mathcal{R}(\theta, p)&=\int_{(\theta, p)}f(x, y)ds\\
