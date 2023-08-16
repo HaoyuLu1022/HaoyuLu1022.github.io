@@ -13,11 +13,11 @@ Education
 ======
 * *B.S.* in Computer Science and Technology, School of Artificial Intelligence, Beijing Normal University, 2024 (expected)
   * GPA: 3.8/4.0
-  * Relevant Courses: 
+  * Relevant Courses (selected): 
     * Compulsory: Data Structure (95), Principles of Computer Composition (95), Algorithm Design and Analysis (94), Probability Theory and Stochastic Process (93)
     * Optional: Introduction to Machine Learning (97), Multimedia Technology (93), Introduction to Big Data (95), Programming in JAVA (95)
 
-Work experience
+Work Experience
 ======
 * Apr. 2023: Research Assistant
   * [Natural Hazards Remote Sensing Lab](https://gsprs-pku.github.io/), Peking University
@@ -40,6 +40,17 @@ Publications
   <ul>{% for post in site.publications %}
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
+
+Honors and Awards
+======
+> Selected most important and recent
+* *Silver Medal*, Internationally Genetically Engineered Machine Competition (Modelling), Nov. 2022
+* *1st Prize Scholarship* (10%), Beijing Normal University, Oct. 2022 & Oct. 2021
+* *1st Prize*, National English Contest for College Students, Oct. 2022
+* *Excellent Student Cadre*, Beijing Normal University, Oct. 2022
+* *2nd Prize*, Beijing College Students' `Internet+' Innovation and Entrepreneurship Competition, Aug. 2022
+* *Honorable Mention*, Interdisciplinary Contest In Modelling, May. 2022
+* *Merit Studen*t, Beijing Normal University, Oct. 2021
 
 Skills and Interest
 ======
