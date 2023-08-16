@@ -2,6 +2,7 @@
 title: "2022 international Genetically Engineered Machine Competition"
 excerpt: "BNU-China won silver medal in iGEM 2022.<br/>
 <img src='/images/igem.png' width='500' height='300'>"
+date: 2022-12-14
 collection: portfolio
 ---
 
