@@ -9,6 +9,8 @@ redirect_from:
 
 {% include base_path %}
 
+> For the PDF version, please refer to [haoyulu_cv](/files/haoyulu_cv.pdf)
+
 Education
 ======
 * *B.S.* in Computer Science and Technology, School of Artificial Intelligence, Beijing Normal University, 2024 (expected)
@@ -43,7 +45,8 @@ Publications
 
 Honors and Awards
 ======
-> Selected most important and recent
+> Selected by siginificance and recency
+
 * *Silver Medal*, Internationally Genetically Engineered Machine Competition (Modelling), Nov. 2022
 * *1st Prize Scholarship* (10%), Beijing Normal University, Oct. 2022 & Oct. 2021
 * *1st Prize*, National English Contest for College Students, Oct. 2022
