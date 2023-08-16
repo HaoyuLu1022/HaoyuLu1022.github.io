@@ -1,6 +1,6 @@
 ---
 title: "2022 international Genetically Engineered Machine Competition"
-excerpt: "I participated as the leader of modelling group in BNU-China 2022, and we won silver medal finally.<br/>
+excerpt: "BNU-China won silver medal in iGEM 2022.<br/>
 <img src='/images/igem.png' width='500' height='300'>"
 collection: portfolio
 ---
