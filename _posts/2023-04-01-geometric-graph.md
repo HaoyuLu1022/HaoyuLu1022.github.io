@@ -80,7 +80,11 @@ $$
 \end{aligned}
 $$
 
-其中$\textbf{W}_{\mu},\textbf{W}_{h},\textbf{W}_{m}$是对特征$\textbf{s}$和$\textbf{V}$进行线性变换的权重矩阵
+其中
+
+$$\textbf{W}_{\mu},\textbf{W}_{h},\textbf{W}_{m}$$
+
+是对特征$\textbf{s}$和$\textbf{V}$进行线性变换的权重矩阵
 - 可以证明输出$\mathbf{s}^{\prime}$是$E(3)$不变的，$\mathbf{V}^{\prime}$是$E(3)$等变的
 	- $\mathbf{s}^{\prime}$只与向量$\mathbf{V}$的L2范数有关，相对于欧式变换保持不变
 	- $\mathbf{V}^{\prime}$与$\mathbf{W}_\mu \mathbf{W}_h \mathbf{V}$有关，只有发生欧式变换时才变化，因此等变
@@ -113,7 +117,8 @@ $$
 ## GVP-GNN: Message from Vector Features
 
 GVP-GNN遵循相同的message范式，额外允许边和点同时具备scalar feature和vector feature
-用$(\mathbf{s}_j, \mathbf{V}_j)$代表结点的特征，用$(\mathbf{s}_{i j}, \mathbf{V}_{i j})$代表边的特征
+* 用$(\mathbf{s}_j, \mathbf{V}_j)$代表结点的特征
+* 用$(\mathbf{s}_{i j}, \mathbf{V}_{i j})$代表边的特征
 
 ### Message Function
 
@@ -125,7 +130,11 @@ $$
 $$
 
 ### Update Function
-为了简化表达，令$\mathbf{h}=(\mathbf{s}, \mathbf{V}), \mathbf{m}_{ij}=(\mathbf{s}^{\prime}_{ij}, \mathbf{V}^{\prime}_{ij})$
+为了简化表达，令
+
+$$\mathbf{h}=(\mathbf{s}, \mathbf{V}), \mathbf{m}_{ij}=(\mathbf{s}^{\prime}_{ij}, \mathbf{V}^{\prime}_{ij})$$
+
+则有
 
 $$
 \mathbf{h}_i \leftarrow \operatorname{Layer} \operatorname{Norm}\left(\mathbf{h}_i+\frac{1}{|\mathcal{N}(i)|} \operatorname{Dropout}\left(\sum_{j \in \mathcal{N}(i)} \mathbf{m}_{i j}\right)\right)
