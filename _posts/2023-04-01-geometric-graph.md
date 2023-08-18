@@ -90,7 +90,9 @@ $$
 ## GNN Basics
 
 GNN的重要机制是message，即通过边、点的特征，在邻接结点中交换message已更新node representation，从而在推理时整合graph的拓扑结构
-用$\mathbf{h}_{i}$和$\mathbf{h}_{j}$代表结点$i$和$j$的特征，$\mathbf{e}_{ij}$代表边的特征
+- 用$\mathbf{h}_{i}$代表结点$i$的特征
+- 用$\mathbf{h}_{j}$代表结点$j$的特征
+- $\mathbf{e}_{ij}$代表边的特征
 
 ### Message Function
 
