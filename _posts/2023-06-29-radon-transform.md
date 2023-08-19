@@ -4,6 +4,7 @@ date: 2023-06-29
 permalink: /posts/2023/06/radon-transform/
 tags:
   - Radon transform
+  - imaging science
 ---
 
 The Radon transform is the transform of our n-dimensional volume to a complete set of (n-1)-dimensional line integrals. Whereas the inverse Radon transform is the transform from our complete (n-1)-dimensional line integrals back to the original image.
