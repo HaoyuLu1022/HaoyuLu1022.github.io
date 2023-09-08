@@ -63,9 +63,10 @@ Skills and Interest
   * Development environment configuration across multiple OS platforms, including Linux
 * Miscellaneous
   * Swimming
-  * Basketball
   * Climbing
   * Photography
+  * Hiking
+  * Basketball
   
 <!-- Talks
 ======
