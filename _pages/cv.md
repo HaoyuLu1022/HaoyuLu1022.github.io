@@ -45,7 +45,7 @@ Publications
 
 Honors and Awards
 ======
-> Selected by siginificance and recency
+> Selected by significance and recency
 
 * *Silver Medal*, Internationally Genetically Engineered Machine Competition (Modelling), Nov. 2022
 * *1st Prize Scholarship* (10%), Beijing Normal University, Oct. 2022 & Oct. 2021
@@ -57,11 +57,25 @@ Honors and Awards
 
 Skills and Interest
 ======
-* Professional: proficient in
+Programming: proficient in
   * Programming languages: C/C++, Python, MATLAB, C#, Java
   * Deep learning frameworks: PyTorch, TensorFlow
   * Development environment configuration across multiple OS platforms, including Linux
-* Miscellaneous
+
+Languages: 
+  * English - Fluent
+    * TOEFL: 108
+      * Reading: 29/30
+      * Listening: 26/30
+      * Speaking: 26/30
+      * Writing: 27/30
+    * GRE: 327+3.5
+      * Verbal reasoning: 158/170
+      * Quantitative reasoning: 169/170
+      * Writing: 3.5/6.0
+    * CET-6: 605
+
+Miscellaneous
   * Swimming
   * Climbing
   * Photography

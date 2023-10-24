@@ -7,7 +7,7 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Haoyu Lu / Have Fun"
+title                    : "Haoyu Lu / 卢皓宇"
 title_separator          : "-"
 name                     : &name "Haoyu Lu"
 description              : &description "personal description"
@@ -57,7 +57,7 @@ yandex_site_verification :
 
 # Social Sharing
 twitter:
-  username               : # &twitter
+  username               : HaoyuLu1686984
 facebook:
   username               : HalveLuve1022
   app_id                 :
@@ -109,7 +109,7 @@ author:
   stackoverflow    : # http://stackoverflow.com/users/123456/username
   steam            :
   tumblr           :
-  twitter          : #"replacethistwitterhandle"
+  twitter          : "HaoyuLu1686984"
   vine             :
   weibo            :
   xing             :
