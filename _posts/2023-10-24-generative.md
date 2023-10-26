@@ -15,8 +15,8 @@ Generative models, powered by AI, is a big trend now for stuff synthesis (texts,
   - [Score Matching](#score-matching)
   - [Langevin Dynamics](#langevin-dynamics)
 - [Denoising Diffusion Probabilistic Models](#denoising-diffusion-probabilistic-models)
-  - [Forward Process](#forward-process)
-  - [Backward Process](#backward-process)
+  - [Forward Process: Adding Noise](#forward-process-adding-noise)
+  - [Backward Process: Removing Noise](#backward-process-removing-noise)
 - [Score-based Generative Models](#score-based-generative-models)
 - [References](#references)
 
@@ -203,7 +203,7 @@ $$
 Now recall how weights are updated in SGD
 
 $$
-w_{t+1}=w_t-\alpha \frac{\partial L}{\partial w_t}
+w_{t+1}=w_t-a \frac{\partial L}{\partial w_t}
 $$
 
 If we neglect the random term in Langevin dynamics, and compare the two equations, we can arrive at the following conclusions:
@@ -224,7 +224,7 @@ where $x_0$ is sampled at random from a prior distribution, $\delta$ denotes ste
 
 ![Variational Diffusion Models](/images/vdm.png)
 
-## Forward Process
+## Forward Process: Adding Noise
 
 $x_0$ is the original image, and each $x_{t-1}\rightarrow x_t$ adds noise gradually to it. Transitioning between 2 adjacent states can be modelled linearly, i.e., 
 
@@ -275,9 +275,166 @@ $$
 x_t=\sqrt{a_t}x_0+\sqrt{1-a_t}\varepsilon_t, \quad \varepsilon_t\sim \mathcal{N}(0, \mathbf{I}), 
 $$
 
-which aligns with the form in the original paper[^4]. 
+which aligns with the form in the original paper[^4]. Utilizing techniques of re-parameterization, we could formulate the forward process as sampling from a Gaussian distribution, namely
 
-## Backward Process
+$$
+x_t\sim q(x_t\mid x_{t-1})=\mathcal{N}(x_t; \sqrt{a_t}x_{t-1}, (1-a_t)\mathbf{I}).
+$$
+
+The whole forward process, thus, is an estimation of posterior, denoted as
+
+$$
+q(x_{1:T}\mid x_0)=\prod\limits_{t=1}^T q(x_t\mid x_{t-1}).
+$$
+
+## Backward Process: Removing Noise
+
+The well-known generative model VAE encodes ($x\rightarrow z$) and decodes ($z\rightarrow x$) straightforward (encoder $q(z\mid x)$, decoder $p(x\mid z)$, and prior $q(z)$). This simpleness in turn limits its performance. Whereas diffusion model can be regarded as hierarchical VAE (HVAE), which decomposes the encode and decode processes into $T$ steps, 
+
+$$
+\begin{aligned}
+&\text{Encode}: x_0\rightarrow x_1\rightarrow x_2 \rightarrow \cdots \rightarrow x_T\\
+&\text{Decode}: x_T\rightarrow x_{T-1}\rightarrow x_{T-2}\rightarrow \cdots \rightarrow x_0.
+\end{aligned}
+$$
+
+Each encode and decode sub-process can be modelled as $q(x_t\mid x_{t-1})$ and $p(x_{t-1}\mid x_t)$ respectively, which is similar to fitting a curve with piecewise function. 
+
+Generative models like VAE and diffusion model are all likelihood-based model, which, literally, maximizes the likelihood estimation $p_{\theta}(x_0)$ towards the real data distribution. Just like what we do in the forward process, we model each step of backward process as $p_{\theta}(x_{t-1}\mid x_t)$, and the linear relationship between 2 adjacent states as Gaussian distributions, i.e., 
+
+$$
+p_{\theta}(x_{t-1}\mid x_t)=\mathcal{N}(x_{t-1};\mu_{\theta}(x_t, t), \Sigma_{\theta}(x_t, t)).
+$$
+
+And the whole backward process can be represented by a joint distribution 
+
+$$
+p_{\theta}(x_{0:T})=p(x_T)\prod_{t=1}^T p_{\theta}(x_{t-1}\mid x_t).
+$$
+
+Based on law of total probability, we can expand the logarithm of likelihood as follows
+
+$$
+\begin{aligned}
+& \log p_{\theta}(x)=\log \int p_{\theta}\left(x_{0: T}\right) \mathrm{d} x_{1: T} \\
+& =\log \int \frac{p_{\theta}\left(x_{0: T}\right) q\left(x_{1: T} \mid x_0\right)}{q\left(x_{1: T} \mid x_0\right)} \mathrm{d} x_{1: T} \\
+& =\log \mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\frac{p_{\theta}\left(x_{0: T}\right)}{q\left(x_{1: T} \mid x_0\right)}\right] \\
+& \geq \mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p_{\theta}\left(x_{0: T}\right)}{q\left(x_{1: T} \mid x_0\right)}\right] \\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p\left(x_T\right) \prod_{t=1}^T p_{\theta}\left(x_{t-1} \mid x_t\right)}{\prod_{t=1}^T q\left(x_t \mid x_{t-1}\right)}\right] \\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p\left(x_T\right) p_{\theta}\left(x_0 \mid x_1\right) \prod_{t=2}^T p_{\theta}\left(x_{t-1} \mid x_t\right)}{q\left(x_T \mid x_{T-1}\right) \prod_{t=1}^{T-1} q\left(x_t \mid x_{t-1}\right)}\right] \\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p\left(x_T\right) p_{\theta}\left(x_0 \mid x_1\right) \prod_{t=1}^{T-1} p_{\theta}\left(x_t \mid x_{t+1}\right)}{q\left(x_T \mid x_{T-1}\right) \prod_{t=1}^{T-1} q\left(x_t \mid x_{t-1}\right)}\right] \\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p\left(x_T\right) p_{\theta}\left(x_0 \mid x_1\right)}{q\left(x_T \mid x_{T-1}\right)}\right]+\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \prod_{t=1}^{T-1} \frac{p_{\theta}\left(x_t \mid x_{t+1}\right)}{q\left(x_t \mid x_{t-1}\right)}\right] \\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log p_{\theta}\left(x_0 \mid x_1\right)\right]+\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p\left(x_T\right)}{q\left(x_T \mid x_{T-1}\right)}\right]+\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\sum_{t=1}^{T-1} \log \frac{p_{\theta}\left(x_t \mid x_{t+1}\right)}{q\left(x_t \mid x_{t-1}\right)}\right] \\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log p_{\theta}\left(x_0 \mid x_1\right)\right]+\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p\left(x_T\right)}{q\left(x_T \mid x_{T-1}\right)}\right]+\sum_{t=1}^{T-1} \mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p_{\theta}\left(x_t \mid x_{t+1}\right)}{q\left(x_t \mid x_{t-1}\right)}\right] \\
+& =\mathbb{E}_{q\left(x_1 \mid x_0\right)}\left[\log p_{\theta}\left(x_0 \mid x_1\right)\right]+\mathbb{E}_{q\left(x_{T-1}, x_T \mid x_0\right)}\left[\log \frac{p\left(x_T\right)}{q\left(x_T \mid x_{T-1}\right)}\right]+\sum_{t=1}^{T-1} \mathbb{E}_{q\left(x_{t-1}, x_t, x_{t+1} \mid x_0\right)}\left[\log \frac{p_{\theta}\left(x_t \mid x_{t+1}\right)}{q\left(x_t \mid x_{t-1}\right)}\right] \\
+& =\underbrace{\mathbb{E}_{q\left(x_1 \mid x_0\right)}\left[\log p_\theta\left(x_0 \mid x_1\right)\right]}_{\text {reconstruction term }}-\underbrace{\mathbb{E}_{q\left(x_{T-1} \mid x_0\right)}\left[D_{\mathrm{KL}}\left(q\left(x_T \mid x_{T-1}\right) \| p\left(x_T\right)\right)\right]}_{\text {prior matching term }} \\
+& -\sum_{t=1}^{T-1} \underbrace{\mathbb{E}_{q\left(x_{t-1}, x_{t+1} \mid x_0\right)}\left[D_{\mathrm{KL}}\left(q\left(x_t \mid x_{t-1}\right) \| p_\theta\left(x_t \mid x_{t+1}\right)\right)\right]}_{\text {consistency term }}. 
+\end{aligned}
+$$
+
+To calculate both $q\left(x_t \mid x_{t-1}\right)$ and $p_\theta\left(x_t \mid x_{t+1}\right)$ in the last consistency term demands knowledge of 3 random variables, which dramatically increases the variance of estimation. Note that currently the optimization means to minimize the discrepancy between <u>real $x_t$ by adding forward noise to $x_{t-1}$</u> and <u>estimated $x_t$ by removing noise backwardly from $x_{t+1}$</u>.
+
+Since $x_0$ is known and the steps are Markovian, we could have the following corollary.
+
+$$
+q(x_t\mid x_{t-1}, x_0)=\frac{q(x_{t-1}\mid x_t, x_0)q(x_t\mid x_0)}{q(x_{t-1}\mid x_0)}.
+$$
+
+So we can rewrite the likelihood above as
+
+$$
+
+\begin{aligned}
+\log p_{\theta}(x) & \geq \mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p_{\theta}\left(x_{0: T}\right)}{q\left(x_{1: T} \mid x_0\right)}\right] \\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p\left(x_T\right) \prod_{t=1}^T p_{\theta}\left(x_{t-1} \mid x_t\right)}{\prod_{t=1}^T q\left(x_t \mid x_{t-1}\right)}\right] \\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p\left(x_T\right) p_{\theta}\left(x_0 \mid x_1\right) \prod_{t=2}^T p_{\theta}\left(x_{t-1} \mid x_t\right)}{q\left(x_1 \mid x_0\right) \prod_{t=2}^T q\left(x_t \mid x_{t-1}\right)}\right] \\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p\left(x_T\right) p_{\theta}\left(x_0 \mid x_1\right) \prod_{t=2}^T p_{\theta}\left(x_{t-1} \mid x_t\right)}{q\left(x_1 \mid x_0\right) \prod_{t=2}^T q\left(x_t \mid x_{t-1}, x_0\right)}\right] \\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p_{\theta}\left(x_T\right) p_{\theta}\left(x_0 \mid x_1\right)}{q\left(x_1 \mid x_0\right)}+\log \prod_{t=2}^T \frac{p_{\theta}\left(x_{t-1} \mid x_t\right)}{q\left(x_t \mid x_{t-1}, x_0\right)}\right] \\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p\left(x_T\right) p_{\theta}\left(x_0 \mid x_1\right)}{q\left(x_1 \mid x_0\right)}+\log \prod_{t=2}^T \frac{p_{\theta}\left(x_{t-1} \mid x_t\right)}{\frac{q\left(x_{t-1} \mid x_t, x_0\right) q\left(x_t \mid x_0\right)}{q\left(x_{t-1} \mid x_0\right)}}\right]\\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p\left(x_T\right) p_{\theta}\left(x_0 \mid x_1\right)}{q\left(x_1 \mid x_0\right)}+\log \prod_{t=2}^T \frac{p_{\theta}\left(x_{t-1} \mid x_t\right)}{\frac{q\left(x_{t-1} \mid x_t, x_0\right) q\left(x_t+x_0\right)}{q\left(x_{t-1} \mid x_0\right)}}\right] \\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p\left(x_T\right) p_{\theta}\left(x_0 \mid x_1\right)}{q\left(x_1 \mid x_0\right)}+\log \frac{q\left(x_1 \mid x_0\right)}{q\left(x_T \mid x_0\right)}+\log \prod_{t=2}^T \frac{p_{\theta}\left(x_{t-1} \mid x_t\right)}{q\left(x_{t-1} \mid x_t, x_0\right)}\right] \\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p\left(x_T\right) p_{\theta}\left(x_0 \mid x_1\right)}{q\left(x_T \mid x_0\right)}+\sum_{t=2}^T \log \frac{p_{\theta}\left(x_{t-1} \mid x_t\right)}{q\left(x_{t-1} \mid x_t, x_0\right)}\right] \\
+& =\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log p_{\theta}\left(x_0 \mid x_1\right)\right]+\mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p\left(x_T\right)}{q\left(x_T \mid x_0\right)}\right]+\sum_{t=2}^T \mathbb{E}_{q\left(x_{1: T} \mid x_0\right)}\left[\log \frac{p_{\theta}\left(x_{t-1} \mid x_t\right)}{q\left(x_{t-1} \mid x_t, x_0\right)}\right] \\
+& =\mathbb{E}_{q\left(x_1 \mid x_0\right)}\left[\log p_{\theta}\left(x_0 \mid x_1\right)\right]+\mathbb{E}_{q\left(x_T \mid x_0\right)}\left[\log \frac{p\left(x_T\right)}{q\left(x_T \mid x_0\right)}\right]+\sum_{t=2}^T \mathbb{E}_{q\left(x_t, x_{t-1} \mid x_0\right)}\left[\log \frac{p_{\theta}\left(x_{t-1} \mid x_t\right)}{q\left(x_{t-1} \mid x_t, x_0\right)}\right] \\
+& =\underbrace{\mathbb{E}_{q\left(x_1 \mid x_0\right)}\left[\log p_{\theta}\left(x_0 \mid x_1\right)\right]}_{\text {reconstruction term }}-\underbrace{D_{\mathrm{KL}}\left(q\left(x_T \mid x_0\right) \| p\left(x_T\right)\right)}_{\text {prior matching term }}-\sum_{t=2}^T \underbrace{\mathbb{E}_{q\left(x_t \mid x_0\right)}\left[D_{\mathrm{KL}}\left(q\left(x_{t-1} \mid x_t, x_0\right) \| p_{\theta}\left(x_{t-1} \mid x_t\right)\right)\right]}_{\text {denoising matching term }}.
+\end{aligned}
+$$
+
+The deduction begins to differ from the 4th line. And now, the last term is a contrast denoising term, and the target becomes to minimize the discrepancy between <u>real $x_{t-1}$ by removing noise from $x_{t}$</u> and <u>estimated $x_{t-1}$ by removing noise from $x_{t}$</u>. This brings about more stable estimation. Hitherto, the question is how to model $q(x_{t-1}\mid x_t, x_0)$ and $p_{\theta}(x_{t-1}\mid x_t)$, and further to derive their KL divergence.
+
+$$
+\begin{aligned}
+& q\left(x_{t-1} \mid x_t, x_0\right)=\frac{q\left(x_t \mid x_{t-1}, x_0\right) q\left(x_{t-1} \mid x_0\right)}{q\left(x_t \mid x_0\right)} \\
+& =\frac{\mathcal{N}\left(x_t ; \sqrt{a_t} x_{t-1},\left(1-a_t\right) \mathbf{I}\right) \mathcal{N}\left(x_{t-1} ; \sqrt{\bar{a}_{t-1}} x_0,\left(1-\bar{a}_{t-1}\right) \mathbf{I}\right)}{\mathcal{N}\left(x_t ; \sqrt{\bar{a}_t} x_0,\left(1-\bar{a}_t\right) \mathbf{I}\right)} \\
+& \propto \exp \left\{-\left[\frac{\left(x_t-\sqrt{a_t} x_{t-1}\right)^2}{2\left(1-a_t\right)}+\frac{\left(x_{t-1}-\sqrt{\bar{a}_{t-1}} x_0\right)^2}{2\left(1-\bar{a}_{t-1}\right)}-\frac{\left(x_t-\sqrt{\bar{a}_t} x_0\right)^2}{2\left(1-\bar{a}_t\right)}\right]\right\} \\
+& =\exp \left\{-\frac{1}{2}\left[\frac{\left(x_t-\sqrt{a_t} x_{t-1}\right)^2}{1-a_t}+\frac{\left(x_{t-1}-\sqrt{\bar{a}_{t-1}} x_0\right)^2}{1-\bar{a}_{t-1}}-\frac{\left(x_t-\sqrt{\bar{a}_t} x_0\right)^2}{1-\bar{a}_t}\right]\right\} \\
+& =\exp \left\{-\frac{1}{2}\left[\frac{\left(-2 \sqrt{a_t} x_t x_{t-1}+a_t x_{t-1}^2\right)}{1-a_t}+\frac{\left(x_{t-1}^2-2 \sqrt{\bar{a}_{t-1}} x_{t-1} x_0\right)}{1-\bar{a}_{t-1}}+C\left(x_t, x_0\right)\right]\right\} \\
+& \propto \exp \left\{-\frac{1}{2}\left[-\frac{2 \sqrt{a_t} x_t x_{t-1}}{1-a_t}+\frac{a_t x_{t-1}^2}{1-a_t}+\frac{x_{t-1}^2}{1-\bar{a}_{t-1}}-\frac{2 \sqrt{a_{t-1}} x_{t-1} x_0}{1-\bar{a}_{t-1}}\right]\right\} \\
+& =\exp \left\{-\frac{1}{2}\left[\left(\frac{a_t}{1-a_t}+\frac{1}{1-\bar{a}_{t-1}}\right) x_{t-1}^2-2\left(\frac{\sqrt{a_t} x_t}{1-a_t}+\frac{\sqrt{\bar{a}_{t-1}} x_0}{1-\bar{a}_{t-1}}\right) x_{t-1}\right]\right\} \\
+& =\exp \left\{-\frac{1}{2}\left[\frac{a_t\left(1-\bar{a}_{t-1}\right)+1-a_t}{\left(1-a_t\right)\left(1-\bar{a}_{t-1}\right)} x_{t-1}^2-2\left(\frac{\sqrt{a_t} x_t}{1-a_t}+\frac{\sqrt{\bar{a}_{t-1}} x_0}{1-\bar{a}_{t-1}}\right) x_{t-1}\right]\right\} \\
+& =\exp \left\{-\frac{1}{2}\left[\frac{a_t-\bar{a}_t+1-a_t}{\left(1-a_t\right)\left(1-\bar{a}_{t-1}\right)} x_{t-1}^2-2\left(\frac{\sqrt{a_t} x_t}{1-a_t}+\frac{\sqrt{\bar{a}_{t-1}} x_0}{1-\bar{a}_{t-1}}\right) x_{t-1}\right]\right\} \\
+& =\exp \left\{-\frac{1}{2}\left[\frac{1-\bar{a}_t}{\left(1-a_t\right)\left(1-\bar{a}_{t-1}\right)} x_{t-1}^2-2\left(\frac{\sqrt{a_t} x_t}{1-a_t}+\frac{\sqrt{\bar{a}_{t-1}} x_0}{1-\bar{a}_{t-1}}\right) x_{t-1}\right]\right\} \\
+& =\exp \left\{-\frac{1}{2}\left(\frac{1-\bar{a}_t}{\left(1-a_t\right)\left(1-\bar{a}_{t-1}\right)}\right)\left[x_{t-1}^2-2 \frac{\left(\frac{\sqrt{a_t} x_t}{1-a_t}+\frac{\sqrt{\bar{a}_{t-1}} x_0}{1-\bar{a}_{t-1}}\right)}{\frac{1-\bar{a}_t}{\left(1-a_t\right)\left(1-\bar{a}_{t-1}\right)}} x_{t-1}\right]\right\} \\
+& =\exp \left\{-\frac{1}{2}\left(\frac{1-\bar{a}_t}{\left(1-a_t\right)\left(1-\bar{a}_{t-1}\right)}\right)\left[x_{t-1}^2-2 \frac{\left(\frac{\sqrt{a_t} x_t}{1-a_t}+\frac{\sqrt{\bar{a}_{t-1}} x_0}{1-\bar{a}_{t-1}}\right)\left(1-a_t\right)\left(1-\bar{a}_{t-1}\right)}{1-\bar{a}_t} x_{t-1}\right]\right\} \\
+& =\exp \left\{-\frac{1}{2}\left(\frac{1}{\frac{\left(1-a_t\right)\left(1-\bar{a}_{t-1}\right)}{1-\bar{a}_t}}\right)\left[x_{t-1}^2-2 \frac{\sqrt{a_t}\left(1-\bar{a}_{t-1}\right) x_t+\sqrt{\bar{a}_{t-1}}\left(1-a_t\right) x_0}{1-\bar{a}_t} x_{t-1}\right]\right\} \\
+& \propto \mathcal{N}(x_{t-1} ; \underbrace{\frac{\sqrt{a_t}\left(1-\bar{a}_{t-1}\right) x_t+\sqrt{\bar{a}_{t-1}}\left(1-a_t\right) x_0}{1-\bar{a}_t}}_{\mu_q\left(x_t, x_0\right)}, \underbrace{\left.\frac{\left(1-a_t\right)\left(1-\bar{a}_{t-1}\right)}{1-\bar{a}_t} \mathbf{I}\right)}_{\Sigma_q(t)}. 
+\end{aligned}
+$$
+
+And we could also regard it as sampling from a Gaussian distribution, 
+
+$$
+x_{t-1}\sim \mathcal{N}(\frac{\sqrt{\bar{a}_{t-1}} b_t}{1-\bar{a}_t} x_0+\frac{\sqrt{a_t}\left(1-\bar{a}_{t-1}\right)}{1-\bar{a}_t} x_t, \frac{1-\bar{a}_{t-1}}{1-\bar{a}_t} b_t \mathbf{I}).
+$$
+
+Now we only need a model for $p_{\theta}(x_{t-1}\mid x_t)$. For simplicity, we can model the variance as $\Sigma_{\theta}=\Sigma_{q}$. According to 
+
+$$
+\begin{aligned}
+& D_{\mathrm{KL}}\left(\mathcal{N}\left(x ; \mu_x, \Sigma_x\right) \| \mathcal{N}\left(\boldsymbol{y} ; \mu_y, \Sigma_y\right)\right) \\
+& =\frac{1}{2}\left[\log \frac{\left|\Sigma_y\right|}{\left|\Sigma_x\right|}-d+\operatorname{tr}\left(\Sigma_y^{-1} \Sigma_x\right)+\left(\mu_y-\mu_x\right)^T \Sigma_y^{-1}\left(\mu_y-\mu_x\right)\right],
+\end{aligned}
+$$
+
+we can have
+
+$$
+\begin{aligned}
+& \underset{\theta}{\arg \min } D_{\mathrm{KL}}\left(q\left(x_{t-1} \mid x_t, x_0\right) \| p_{\theta}\left(x_{t-1} \mid x_t\right)\right) \\
+= & \underset{\theta}{\arg \min } D_{\mathrm{KL}}\left(\mathcal{N}\left(x_{t-1} ; \mu_q, \Sigma_q(t)\right) \| \mathcal{N}\left(x_{t-1} ; \mu_{\theta}, \Sigma_q(t)\right)\right) \\
+= & \underset{\theta}{\arg \min } \frac{1}{2}\left[\log \frac{\left|\Sigma_q(t)\right|}{\left|\Sigma_q(t)\right|}-d+\operatorname{tr}\left(\Sigma_q(t)^{-1} \Sigma_q(t)\right)+\left(\mu_{\theta}-\mu_q\right)^T \Sigma_q(t)^{-1}\left(\mu_{\theta}-\mu_q\right)\right] \\
+= & \underset{\theta}{\arg \min } \frac{1}{2}\left[\log 1-d+d+\left(\mu_{\theta}-\mu_q\right)^T \Sigma_q(t)^{-1}\left(\mu_{\theta}-\mu_q\right)\right] \\
+= & \underset{\theta}{\arg \min } \frac{1}{2}\left[\left(\mu_{\theta}-\mu_q\right)^T \Sigma_q(t)^{-1}\left(\mu_{\theta}-\mu_q\right)\right] \\
+= & \underset{\theta}{\arg \min } \frac{1}{2}\left[\left(\mu_{\theta}-\mu_q\right)^T\left(\sigma_q^2(t) \mathbf{I}\right)^{-1}\left(\mu_{\theta}-\mu_q\right)\right] \\
+= & \underset{\theta}{\arg \min } \frac{1}{2 \sigma_q^2(t)}\left[\left\|\mu_{\theta}-\mu_q\right\|_2^2\right]
+\end{aligned}
+$$
+
+Apparently what we need to compare is the mean of the 2 models, where $\mu_q$ is known and $\mu_{\theta}$ needs to be learned. Since $\mu_q$ denotes as
+
+$$
+\mu_q=\frac{\sqrt{\bar{a}_{t-1}} b_t}{1-\bar{a}_t} x_0+\frac{\sqrt{a_t}\left(1-\bar{a}_{t-1}\right)}{1-\bar{a}_t} x_t, 
+$$
+
+if we model $\mu_{\theta}$ similar to $\mu_q$, then the model can learn from $x_0$ instead of $\mu_q$, which may be complex. So we have
+
+$$
+\mu_{\theta}=\frac{\sqrt{\bar{a}_{t-1}} b_t}{1-\bar{a}_t} f_{\theta}\left(x_t, t\right)+\frac{\sqrt{a_t}\left(1-\bar{a}_{t-1}\right)}{1-\bar{a}_t} x_t
+$$
+
+And further, the KL divergence goes
+
+$$
+\begin{aligned}
+& \underset{\theta}{\arg \min } D_{\mathrm{KL}}\left(q\left(x_{t-1} \mid x_t, x_0\right) \| p_{\theta}\left(x_{t-1} \mid x_t\right)\right) \\
+= & \underset{\theta}{\arg \min } \frac{1}{2 \sigma_q^2(t)}\left[\left\|\mu_{\theta}-\mu_q\right\|_2^2\right] \\
+= & \underset{\theta}{\arg \min } \frac{1}{2 \sigma_q^2(t)}\left[\left\|\frac{\sqrt{\bar{a}_{t-1}} b_t f_{\theta}\left(x_t, t\right)}{1-\bar{a}_t}-\frac{\sqrt{\bar{a}_{t-1}} b_t x_0}{1-\bar{a}_t}\right\|_2^2\right] \\
+= & \underset{\theta}{\arg \min } \frac{1}{2 \sigma_q^2(t)}\left[\left\|\frac{\sqrt{\bar{a}_{t-1}} b_t}{1-\bar{a}_t}\left(f_{\theta}\left(x_t, t\right)-x_0\right)\right\|_2^2\right] \\
+= & \underset{\theta}{\arg \min } \frac{1}{2 \sigma_q^2(t)} \frac{\bar{a}_{t-1} b_t^2}{\left(1-\bar{a}_t\right)^2}\left[\left\|f_{\theta}\left(x_t, t\right)-x_0\right\|_2^2\right]
+\end{aligned}
+$$
+
+Thus far, we can conclude that optimizing a diffusion model boils down to learning a neural network to predict the original image from an arbitrarily noisified version of it.
 
 # Score-based Generative Models
 
