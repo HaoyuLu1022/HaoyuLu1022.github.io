@@ -14,6 +14,10 @@ Generative models, powered by AI, is a big trend now for stuff synthesis (texts,
   - [Tweedie Estimator](#tweedie-estimator)
   - [Score Matching](#score-matching)
   - [Langevin Dynamics](#langevin-dynamics)
+- [Denoising Diffusion Probabilistic Models](#denoising-diffusion-probabilistic-models)
+  - [Forward Process](#forward-process)
+  - [Backward Process](#backward-process)
+- [Score-based Generative Models](#score-based-generative-models)
 - [References](#references)
 
 
@@ -152,7 +156,137 @@ Thus far, it's clear that knowledge about the ground truth data distribution $p(
 
 ## Langevin Dynamics
 
+> For non-French speaker, its pronunciation is close to /laŋˈjevɔn/.
+
+<!-- <iframe src='https://vdn3.vzuu.com/SD/a4669c08-2340-11eb-826e-be7830fcb65c.mp4?disable_local_cache=1&bu=078babd7&c=avc.0.0&f=mp4&expiration=1698256697&auth_key=1698256697-0-0-016cb3e6d691305f46153f85f3c185e5&v=tx&pu=078babd7'></iframe> -->
+<center>
+<video controls="" autoplay="autoplay" name="media"><source src="/images/brownian.mp4" type="video/mp4"></video>
+</center>
+
+Proposed by Paul Langevin, **Langevin equation** describes the dynamics of molecular systems[^2]. Imagine the pollen grains on the surface of water: water molecules bumping into them from random directions, coercing them into random walk. Based on Newton's law, it's easy to write
+
+$$
+\sum F=ma.
+$$
+
+And first, there is one factor known in $\sum F$: a random force $\epsilon_t$ given by water molecules, which could be hypothesized as a normal distribution, whose mean is 0 and whose variance increases as time goes by.
+
+Besides, friction should be included: if one pollen grain has velocity in a given direction, there will be much more water molecules towards the front of it, slowing it down by friction. Therefore, it's safe to say that the friction is inversely proportional to the grain's velocity $v$, i.e., $-\gamma v$, where $\gamma$ is a friction coefficient.
+
+Considering a generic $F$ for any possible external forces, now we arrive at
+
+$$
+ma_t=-\gamma v_t + \epsilon_t + F
+$$
+
+This is usually called the *underdamped* form. Since pollen grains are pretty light, we may just leave out the term $ma_t$, thus arriving at the *overdamped* form
+
+$$
+0=-\gamma v_t + \epsilon_t + F
+$$
+
+Force is a gradient of energy $E$ with regard to displacement $x$, and velocity is the derivative of displacement on time. So we can rewrite the formula above as
+
+$$
+0=-\gamma \frac{\mathrm{d}x}{\mathrm{d}t} + \epsilon_t + \frac{\partial E}{\partial x}
+$$
+
+And we further discretize the time derivative and have
+
+$$
+\begin{aligned}
+0&=-\gamma \frac{x_{t+\mathrm{d}t}-x_t}{\mathrm{d}t} + \epsilon_t + \frac{\partial E}{\partial x}\\
+\Rightarrow x_{t+\mathrm{d}t}&=x_t + \frac{\mathrm{d}t}{\gamma}\frac{\partial E}{\partial x} + \frac{\mathrm{d}t}{\gamma}\epsilon_t
+\end{aligned}
+$$
+
+Now recall how weights are updated in SGD
+
+$$
+w_{t+1}=w_t-\alpha \frac{\partial L}{\partial w_t}
+$$
+
+If we neglect the random term in Langevin dynamics, and compare the two equations, we can arrive at the following conclusions:
+
+- displacement $x$ $\Longleftrightarrow$ weight $w$
+- energy $E$ $\Longleftrightarrow$ loss $L$
+- noise in Brownian motion $\Longleftrightarrow$ error of mini-batch
+
+In this manner, it seems intuitive and reasonable that Langevin dynamics and SGD are analogous. If we combine SGD and Langevin dynamics, it's basically adding Gaussian noise to the standard SGD, avoiding local optima, known as **stochastic gradient Langevin dynamics**[^3].
+
+$$
+x_{t+1}\leftarrow x_t+\delta \nabla_x \log p(x_t)+\sqrt{2\delta}\epsilon_t, t=0, 1, \dots, T, 
+$$
+
+where $x_0$ is sampled at random from a prior distribution, $\delta$ denotes step size, and $\epsilon_t\sim \mathcal{N}(0, \mathbf{I})$ is a perturbing term, ensuring that generated samples won't collapse onto a mode, but hover around it for diversity. When $\delta\rightarrow 0$ and $T\rightarrow \infty$, the ultimate $x_t$ is just the real data.
+
+# Denoising Diffusion Probabilistic Models
+
+![Variational Diffusion Models](/images/vdm.png)
+
+## Forward Process
+
+$x_0$ is the original image, and each $x_{t-1}\rightarrow x_t$ adds noise gradually to it. Transitioning between 2 adjacent states can be modelled linearly, i.e., 
+
+$$
+x_t=a_tx_{t-1}+b_t\varepsilon_t, \quad \varepsilon_t\sim \mathcal{N}(0, \mathbf{I})
+$$
+
+Obviously, since $x_{t-1}$ has more information, $a_t$ must be an attenuation coefficient, i.e., $a_t\in (0, 1)$. For simplicity, we may as well suppose that $b_t\in (0, 1)$. And now we expand the equation above as
+
+$$
+\begin{aligned}
+x_t & =a_t x_{t-1}+b_t \varepsilon_t \\
+& =a_t\left(a_{t-1} x_{t-2}+b_{t-1} \varepsilon_{t-1}\right)+b_t \varepsilon_t \\
+& =a_t a_{t-1} x_{t-2}+a_t b_{t-1} \varepsilon_{t-1}+b_t \varepsilon_t \\
+& =\ldots \\
+& =\left(a_t \ldots a_1\right) x_0+\left(a_t \ldots a_2\right) b_1 \varepsilon_1+\left(a_t \ldots a_3\right) b_2 \varepsilon_2+\cdots+a_t b_{t-1} \varepsilon_{t-1}+b_t \varepsilon_t.
+\end{aligned}
+$$
+
+We can see that the besides the first term, the rest is the sum of multiple independent Gaussian noise, which is also a Gaussian distribution, whose mean is 0 and variance is the sum of squares of each coefficient $\left(a_t \ldots a_2\right)^2 b_1^2+\left(a_t \ldots a_3\right)^2 b_2^2+\cdots+a_t^2 b_{t-1}^2+b_t^2$. Therefore, it can be transformed into
+
+$$
+x_t=\left(a_t \ldots a_1\right) x_0+\sqrt{\left(a_t \ldots a_2\right)^2 b_1^2+\left(a_t \ldots a_3\right)^2 b_2^2+\cdots+a_t^2 b_{t-1}^2+b_t^2}\bar{\varepsilon}_t, \\
+\bar{\varepsilon}_t\sim \mathcal{N}(0, \mathbf{I}).
+$$
+
+Furthermore, if we add up the sum of squares of the coefficients, say, 
+
+$$
+\begin{aligned}
+& \left(a_t \ldots a_1\right)^2+\left(a_t \ldots a_2\right)^2 b_1^2+\left(a_t \ldots a_3\right)^2 b_2^2+\cdots+a_t^2 b_{t-1}^2+b_t^2 \\
+= & \left(a_t \ldots a_2\right)^2 a_1^2+\left(a_t \ldots a_2\right)^2 b_1^2+\left(a_t \ldots a_3\right)^2 b_2^2+\cdots+a_t^2 b_{t-1}^2+b_t^2 \\
+= & \left(a_t \ldots a_2\right)^2\left(a_1^2+b_1^2\right)+\left(a_t \ldots a_3\right)^2 b_2^2+\cdots+a_t^2 b_{t-1}^2+b_t^2 \\
+= & \left(a_t \ldots a_3\right)^2\left(a_2^2\left(a_1^2+b_1^2\right)+b_2^2\right)+\cdots+a_t^2 b_{t-1}^2+b_t^2 \\
+= & a_t^2\left(a_{t-1}^2\left(\ldots\left(a_2^2\left(a_1^2+b_1^2\right)+b_2^2\right)+\ldots\right)+b_{t-1}^2\right)+b_t^2
+\end{aligned}
+$$
+
+it's easy to simplify this term to $1$ when $a_t^2+b_t^2=1$. Denote $\bar{a}_t=(a_t\dots a_1)^2$, and then the variance can be written as $1-\bar{a}_t$. Then we further simplify the forward process to
+
+$$
+x_t=\sqrt{\bar{a}_t}x_0+\sqrt{1-\bar{a}_t}\bar{\varepsilon_t}, \quad \bar{\varepsilon}_t\sim \mathcal{N}(0, \mathbf{I}).
+$$
+
+Then we rewrite Eq. (17) as follows, 
+
+$$
+x_t=\sqrt{a_t}x_0+\sqrt{1-a_t}\varepsilon_t, \quad \varepsilon_t\sim \mathcal{N}(0, \mathbf{I}), 
+$$
+
+which aligns with the form in the original paper[^4]. 
+
+## Backward Process
+
+# Score-based Generative Models
 
 # References
 
 [^1]: LeCun, Yann, et al. "Energy-based models in document recognition and computer vision." Ninth International Conference on Document Analysis and Recognition (ICDAR 2007). Vol. 1. IEEE, 2007.
+
+[^2]: Langevin, Paul. "Sur la théorie du mouvement brownien." Compt. Rendus 146 (1908): 530-533.
+
+[^3]: Welling, Max, and Yee W. Teh. "Bayesian learning via stochastic gradient Langevin dynamics." Proceedings of the 28th international conference on machine learning (ICML-11). 2011.
+
+[^4]: Ho, Jonathan, Ajay Jain, and Pieter Abbeel. "Denoising diffusion probabilistic models." Advances in neural information processing systems 33 (2020): 6840-6851.
