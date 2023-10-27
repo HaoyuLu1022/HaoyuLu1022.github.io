@@ -438,6 +438,56 @@ Thus far, we can conclude that optimizing a diffusion model boils down to learni
 
 # Score-based Generative Models
 
+Recall DDPM's forward process we have just discussed
+
+$$
+x_t\sim q(x_t\mid x_0)=\mathcal{N}(x_t; \sqrt{\bar{a}_t}x_0, (1-\sqrt{\bar{a}_t})\mathbf{I}).
+$$
+
+Tweedie's formula indicates that for a Gaussian variable $z\sim \mathcal{N}(z; \mu_z, \Sigma_z)$, 
+
+$$
+\mu_z=z+\Sigma_z\nabla \log p(z).
+$$
+
+So for the forward process of DDPM, we have
+
+$$
+\sqrt{\bar{a}_t}x_0=x_t+(1-\sqrt{\bar{a}_t})\nabla\log p(x_t), 
+$$
+
+and since we also know that $x_t=\sqrt{\bar{a}_t}x_0+\sqrt{1-\bar{a}_t}\varepsilon_t$, we can derive a representation for the score $\nabla\log p(x_t)$.
+
+$$
+x_0=\frac{x_t+(1-\bar{a}_t)\nabla \log p(x_t)}{\sqrt{\bar{a}_t}}=\frac{x_t-\sqrt{1-\bar{a}_t}\varepsilon_t}{\sqrt{\bar{a}_t}}\\
+\Rightarrow \nabla\log p(x_t)=-\frac{\varepsilon_t}{\sqrt{1-\bar{a}_t}}.
+$$
+
+In deriving the optimization goal of DDPM, we need to first model $\mu_q$, and then approximate it via neural network $\mu_{\theta}$. Now we can rewrite $\mu_q$ as 
+
+$$
+\mu_q=\frac{1}{\sqrt{a}_t}x_t-\frac{1-a_t}{\sqrt{1-\bar{a}_t}\sqrt{a_t}}\varepsilon_t=\frac{1}{\sqrt{a}_t}x_t-\frac{1-a_t}{\sqrt{a_t}}\nabla\log p(x_t).
+$$
+
+Similarly, we rewrite $\mu_{\theta}$ as
+
+$$
+\mu_{\theta}=\frac{1}{\sqrt{a}_t}x_t-\frac{1-a_t}{\sqrt{a_t}}s_{\theta}(x_t, t).
+$$
+
+And now we re-derive the goal for optimization of DDPM using equations rewritten above, 
+
+$$
+\begin{aligned}
+& \underset{\theta}{\arg \min } D_{\mathrm{KL}}\left(q\left(x_{t-1} \mid x_t, x_0\right) \| p_\theta\left(x_{t-1} \mid x_t\right)\right) \\
+= & \underset{\theta}{\arg \min } \frac{1}{2 \sigma_q^2(t)}\left[\left\|\mu_\theta-\mu_q\right\|_2^2\right] \\
+= & \underset{\theta}{\arg \min } \frac{1}{2 \sigma_q^2(t)}\left[\left\|\frac{1-\alpha_t}{\sqrt{\alpha_t}} s_\theta\left(x_t, t\right)-\frac{1-\alpha_t}{\sqrt{\alpha_t}} \nabla \log p\left(x_t\right)\right\|_2^2\right] \\
+= & \underset{\theta}{\arg \min } \frac{1}{2 \sigma_q^2(t)} \frac{\left(1-\alpha_t\right)^2}{\alpha_t}\left[\left\|s_\theta\left(x_t, t\right)-\nabla \log p\left(x_t\right)\right\|_2^2\right]
+\end{aligned}
+$$
+
+And now it's finally clear that SGM and DDPM share the same rationale. An even more explicit explanation of connection between SGM and VDM is illustrated in Luo et al.'s work[^5], and this post is actually a personal re-interpretation of the literature.
+
 # References
 
 [^1]: LeCun, Yann, et al. "Energy-based models in document recognition and computer vision." Ninth International Conference on Document Analysis and Recognition (ICDAR 2007). Vol. 1. IEEE, 2007.
@@ -447,3 +497,5 @@ Thus far, we can conclude that optimizing a diffusion model boils down to learni
 [^3]: Welling, Max, and Yee W. Teh. "Bayesian learning via stochastic gradient Langevin dynamics." Proceedings of the 28th international conference on machine learning (ICML-11). 2011.
 
 [^4]: Ho, Jonathan, Ajay Jain, and Pieter Abbeel. "Denoising diffusion probabilistic models." Advances in neural information processing systems 33 (2020): 6840-6851.
+
+[^5]: Luo, Calvin. "Understanding diffusion models: A unified perspective." arXiv preprint arXiv:2208.11970 (2022).
