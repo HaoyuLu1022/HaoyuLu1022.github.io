@@ -20,7 +20,9 @@ Research Interest
 * AI for Science
 * Computational Mathematics
 * Software Engineering
+* ...
 
+> Programmers are machines that turn coffee into codes.
 
 <!-- A data-driven personal website
 ======
