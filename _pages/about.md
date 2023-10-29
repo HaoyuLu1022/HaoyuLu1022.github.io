@@ -22,7 +22,14 @@ Research Interest
 * Software Engineering
 * ...
 
-> Programmers are machines that turn coffee into codes.
+<!-- > Programmers are machines that turn coffee into codes. -->
+<div style="font-family: Georgia, cursive;"><i>
+Our imagination is stretched to the utmost, not, as in fiction, to imagine things which are not really there, but just to comprehend those things which are there.
+<div style="text-align: right;">
+   — Richard Feynman, <br>“Probability and Uncertainty — the Quantum Mechanical View of Nature”
+</div>
+</i>
+</div>
 
 <!-- A data-driven personal website
 ======
