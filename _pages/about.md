@@ -7,9 +7,9 @@ redirect_from:
   - /about/
   - /about.html
 ---
-I am now a junior student at Beijing Normal University, majoring in Computer Science and Technology. Currently, I serve as research assistant at [NHRS LAB@PKU](https://gsprs-pku.github.io/) under the supervision of [Prof. Xie Hu](https://sites.google.com/site/xiehusar/), and Key Laboratory of Beam Technology of Ministry of Education advised by [Prof. Jianyong Jiang](https://scholar.google.com/citations?user=qput_McAAAAJ&hl=en&oi=ao).
+I am now a junior student at Beijing Normal University, majoring in Computer Science and Technology. Previously, I served as a research assistant at Key Laboratory of Beam Technology of Ministry of Education advised by [Prof. Jianyong Jiang](https://scholar.google.com/citations?user=qput_McAAAAJ&hl=en&oi=ao), and [NHRS LAB@PKU](https://gsprs-pku.github.io/) under the supervision of [Prof. Xie Hu](https://sites.google.com/site/xiehusar/).
 
-This is a personal academic portfolio website. I would present here a detailed introduction about myself, and recent research progress, etc. 
+This is a personal academic portfolio website. I would present here a detailed introduction about myself, discussion on interesting topics and recent research progress, etc. 
 
 <!-- This is the front page of a website that is powered by the [academicpages template](https://github.com/academicpages/academicpages.github.io) and hosted on GitHub pages. [GitHub pages](https://pages.github.com) is a free service in which websites are built and hosted from code and data stored in a GitHub repository, automatically updating when a new commit is made to the respository. This template was forked from the [Minimal Mistakes Jekyll Theme](https://mmistakes.github.io/minimal-mistakes/) created by Michael Rose, and then extended to support the kinds of content that academics have: publications, talks, teaching, a portfolio, blog posts, and a dynamically-generated CV. You can fork [this repository](https://github.com/academicpages/academicpages.github.io) right now, modify the configuration and markdown files, add your own PDFs and other content, and have your own site for free, with no ads! An older version of this template powers my own personal website at [stuartgeiger.com](http://stuartgeiger.com), which uses [this Github repository](https://github.com/staeiou/staeiou.github.io). -->
 

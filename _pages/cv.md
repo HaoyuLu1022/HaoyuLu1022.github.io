@@ -9,12 +9,13 @@ redirect_from:
 
 {% include base_path %}
 
-> For the PDF version, please refer to [cv_haoyulu](/files/cv_haoyulu.pdf)
+> For the PDF version, please refer to [haoyulu_cv](/files/haoyulu_cv_v2.pdf)
 
 Education
 ======
-* *B.S.* in Computer Science and Technology, School of Artificial Intelligence, Beijing Normal University, 2024 (expected)
-  * GPA: 3.8/4.0
+* *B.S.* in Computer Science and Technology, School of Artificial Intelligence, Beijing Normal University, 06/2024
+  * GPA: 3.8/4.0, Rank: 5/53
+  * Thesis title: High-quality 3D Image Reconstruction from Low-dose PET Image Based on Diffusion Model
   * Relevant Courses (selected): 
     * Compulsory: Data Structure (95), Principles of Computer Composition (95), Algorithm Design and Analysis (94), Probability Theory and Stochastic Process (93)
     * Optional: Introduction to Machine Learning (97), Multimedia Technology (93), Introduction to Big Data (95), Programming in JAVA (95)
