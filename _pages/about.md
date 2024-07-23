@@ -7,7 +7,7 @@ redirect_from:
   - /about/
   - /about.html
 ---
-I am now a junior student at Beijing Normal University, majoring in Computer Science and Technology. Previously, I served as a research assistant at Key Laboratory of Beam Technology of Ministry of Education advised by [Prof. Jianyong Jiang](https://scholar.google.com/citations?user=qput_McAAAAJ&hl=en&oi=ao), and [NHRS LAB@PKU](https://gsprs-pku.github.io/) under the supervision of [Prof. Xie Hu](https://sites.google.com/site/xiehusar/).
+I graduated from Beijing Normal University in June 2024, with a Bachelor's Degree of Science in Computer Science and Technology. Previously, I served as a research assistant at Key Laboratory of Beam Technology of Ministry of Education advised by [Prof. Jianyong Jiang](https://scholar.google.com/citations?user=qput_McAAAAJ&hl=en&oi=ao), and [NHRS LAB@PKU](https://gsprs-pku.github.io/) under the supervision of [Prof. Xie Hu](https://sites.google.com/site/xiehusar/). Prospectively, I will head to the University of Melbourne for graduate research as a PhD student. 
 
 This is a personal academic portfolio website. I would present here a detailed introduction about myself, discussion on interesting topics and recent research progress, etc. 
 
@@ -19,7 +19,7 @@ Research Interest
 * Deep Learning
 * AI for Science
 * Computational Mathematics
-* Software Engineering
+* Medical Imaging
 * ...
 
 <!-- > Programmers are machines that turn coffee into codes. -->
