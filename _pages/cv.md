@@ -19,6 +19,9 @@ Education
   * Relevant Courses (selected): 
     * Compulsory: Data Structure (95), Principles of Computer Composition (95), Algorithm Design and Analysis (94), Probability Theory and Stochastic Process (93)
     * Optional: Introduction to Machine Learning (97), Multimedia Technology (93), Introduction to Big Data (95), Programming in JAVA (95)
+* *Ph.D. Student* in Biomedical Engineering, Faculty of Engineering and IT, University of Melbourne
+  * Advisors: Prof. Leigh Johnston, Dr. Catherine Davey
+  * Prosposed thesis title: Physics Informed AI-based PET Image Reconstruction
 
 Work Experience
 ======
