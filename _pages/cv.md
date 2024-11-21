@@ -9,7 +9,7 @@ redirect_from:
 
 {% include base_path %}
 
-> For the PDF version, please refer to [haoyulu_cv](/files/haoyulu_cv_v2.pdf)
+> For the PDF version, please refer to file [cv_haoyulu](/files/cv_haoyulu.pdf)
 
 Education
 ======
