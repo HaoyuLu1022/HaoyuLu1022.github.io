@@ -25,21 +25,21 @@ Education
 
 Work Experience
 ======
-* Apr. 2023: Research Assistant
-  * [Natural Hazards Remote Sensing Lab](https://gsprs-pku.github.io/), Peking University
-  * Duties included:
-    * Implement the domain adaptation segmentation model for *"Enhanced Semantic Segmentation of Multi-annual Retrogressive Thaw Slumps by Domain Adaption" (in review)*, having achieved an F1 score of 0.829 and a recall rate of 0.934, outperforming CycleGAN and fine-tuning
-    * Adapt Segment Anything Model (SAM) to correctly segment craters on planet surface
-  * Supervisor: [Prof. Xie Hu](https://sites.google.com/site/xiehusar/)
-    * Co-advised by [Prof. Shanghang Zhang](https://www.shanghangzhang.com/)
-
-* Sept. 2022: Research Assistant
+* Sept. 2022 - Jun. 2024: Research Assistant
   * Key Laboratory of Beam Technology of Ministry of Education, Beijing Normal University
   * Duties included:
-    * Exploring the combination of computer science and medical imaging techniques, especially in fields of positron emission tomography (PET) and Compton imaging
+    * Explored the combination of computer science and medical imaging techniques, especially in fields of positron emission tomography (PET) and Compton imaging
     * Implemented models for medical image classification and segmentation from U-net to recent Segment Anything Model (SAM), having gained insights into both the imaging principle and related downstream tasks
-    * Currently working on physics-based imaging correction using methods of deep learning and reinforcement learning-aided imaging
+    * Worked on physics-based imaging correction using methods of deep learning and reinforcement learning-aided imaging
   * Supervisor: [Prof. Jianyong Jiang](https://scholar.google.com/citations?user=qput_McAAAAJ&hl=en&oi=ao)
+
+* Apr. 2023 - Oct. 2023: Research Assistant
+  * [Natural Hazards Remote Sensing Lab](https://gsprs-pku.github.io/), Peking University
+  * Duties included:
+    * Implemented the domain adaptation segmentation model for *"Enhanced Semantic Segmentation of Multi-annual Retrogressive Thaw Slumps by Domain Adaption" (in review)*, having achieved an F1 score of 0.829 and a recall rate of 0.934, outperforming CycleGAN and fine-tuning
+    * Adapted Segment Anything Model (SAM) to correctly segment craters on planet surface
+  * Supervisor: [Prof. Xie Hu](https://sites.google.com/site/xiehusar/)
+    * Co-advised by [Prof. Shanghang Zhang](https://www.shanghangzhang.com/)
 
 Publications
 ======
@@ -51,6 +51,7 @@ Honors and Awards
 ======
 > Selected by significance and recency
 
+* *Melbourne Research Scholarship*, University of Melbourne, Mar. 2024
 * *Silver Medal*, Internationally Genetically Engineered Machine Competition (Modelling), Nov. 2022
 * *1st Prize Scholarship* (10%), Beijing Normal University, Oct. 2022 & Oct. 2021
 * *1st Prize*, National English Contest for College Students, Oct. 2022
