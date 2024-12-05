@@ -40,6 +40,8 @@ layout: default
           <p>
             {% if page.venue %}
             Published in <i>{{ page.venue }}</i>, {{ page.date | default: "1900-01-01" | date: "%Y" }} 
+            {% elsif page.accept %}
+            Accepted and in press at <i> {{ page.accept }}</i>
             {% else %}
             <i>Under review</i>
             {% endif %}
