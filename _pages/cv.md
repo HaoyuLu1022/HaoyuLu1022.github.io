@@ -36,7 +36,7 @@ Work Experience
 * Apr. 2023 - Oct. 2023: Research Assistant
   * [Natural Hazards Remote Sensing Lab](https://gsprs-pku.github.io/), Peking University
   * Duties included:
-    * Implemented the domain adaptation segmentation model for *"Enhanced Semantic Segmentation of Multi-annual Retrogressive Thaw Slumps by Domain Adaption" (in review)*, having achieved an F1 score of 0.829 and a recall rate of 0.934, outperforming CycleGAN and fine-tuning
+    * Implemented the domain adaptation segmentation model for *Multi-Annual Inventorying of Retrogressive Thaw Slumps Using Domain Adaptation*, having achieved an F1 score of 0.829 and a recall rate of 0.934, outperforming CycleGAN and fine-tuning
     * Adapted Segment Anything Model (SAM) to correctly segment craters on planet surface
   * Supervisor: [Prof. Xie Hu](https://sites.google.com/site/xiehusar/)
     * Co-advised by [Prof. Shanghang Zhang](https://www.shanghangzhang.com/)
